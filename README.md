@@ -122,6 +122,8 @@ module.exports = {
 
         // function calls after page.goto()
         after: (page) => {},
+
+        dumpConsole: false, // set to true to dump console.* from puppeteer
     },
 };
 ```
