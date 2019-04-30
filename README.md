@@ -113,6 +113,15 @@ module.exports = {
     port: 1111,
     renderOptions: {
         viewport: { deviceScaleFactor: 2 },
+
+        // function calls before page.goto()
+        before: (page) => {
+            // for example, disable cache
+            await page.setCacheEnabled(false);
+        },
+
+        // function calls after page.goto()
+        after: (page) => {},
     },
 };
 ```
@@ -132,7 +141,7 @@ Furthermore at the moment hooks are not supported aswell. But they could be impl
 
 ## Todos
 
-*   check if we need babel for jest aswell. we probably do for jsx syntax
-*   make webpack config option step optional and supply a simple config with js/jsx loader.
-*   document requirement: run jest from root directory of project (containing config files)
-*   support beforeEach, afterEach, beforeAll and afterAll
+-   check if we need babel for jest aswell. we probably do for jsx syntax
+-   make webpack config option step optional and supply a simple config with js/jsx loader.
+-   document requirement: run jest from root directory of project (containing config files)
+-   support beforeEach, afterEach, beforeAll and afterAll
