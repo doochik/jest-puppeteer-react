@@ -1,18 +1,21 @@
-const setupPuppeteer = require('jest-environment-puppeteer/setup');
-const teardownPuppeteer = require('jest-environment-puppeteer/teardown');
+// const setupPuppeteer = require('jest-environment-puppeteer/setup');
+// const teardownPuppeteer = require('jest-environment-puppeteer/teardown');
 const ora = require('ora');
 const debug = require('debug')('jest-puppeteer-react');
 const webpack = require('webpack');
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch');
 const WebpackDevServer = require('webpack-dev-server');
 const { promisify } = require('util');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const glob = promisify(require('glob'));
-const docker = require('./docker');
+// const docker = require('./docker');
 
 const DIR = path.join(os.tmpdir(), 'jest_puppeteer_react_global_setup');
+
+const jestPuppeteerDockerSetup = require('jest-puppeteer-docker/src/setup');
+const jestPuppeteerDockerTeardown = require('jest-puppeteer-docker/src/teardown');
 
 let webpackDevServer;
 
@@ -109,7 +112,10 @@ module.exports.setup = async function setup(
         try {
             spinner.start('Starting Docker for screenshots...');
             debug('calling docker.start()');
-            const ws = await docker.start(config);
+
+            const ws = await jestPuppeteerDockerSetup(config);
+
+            // const ws = await docker.start(config);
             debug('websocket is ' + ws);
             process.env.JEST_PUPPETEER_CONFIG = path.join(DIR, 'config.json');
             fs.mkdirSync(DIR, { recursive: true });
@@ -128,8 +134,8 @@ module.exports.setup = async function setup(
         }
     }
 
-    debug('setup jest-puppeteer');
-    await setupPuppeteer();
+    // debug('setup jest-puppeteer');
+    // await setupPuppeteer();
 };
 
 module.exports.teardown = async function teardown() {
@@ -140,12 +146,13 @@ module.exports.teardown = async function teardown() {
     try {
         if (config.useDocker) {
             debug('stopping docker');
-            await docker.stop(config);
+            await jestPuppeteerDockerTeardown(config);
+            // await docker.stop(config);
         }
     } catch (e) {
         console.error(e);
     }
 
     debug('teardown jest-puppeteer');
-    await teardownPuppeteer();
+    // await teardownPuppeteer();
 };

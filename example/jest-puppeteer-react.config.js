@@ -7,6 +7,9 @@ const isMac = process.platform === 'darwin';
 const isWin32 = process.platform === 'win32';
 
 const dockerHost = () => {
+    return 'localhost';
+
+    /*
     if (isMac) {
         return 'docker.for.mac.host.internal';
     }
@@ -14,8 +17,10 @@ const dockerHost = () => {
         return 'host.docker.internal';
     }
     return '172.17.0.1';
+    */
 };
 
+/*
 function getIPAddress() {
     const interfaces = require('os').networkInterfaces();
     for (let devName in interfaces) {
@@ -36,6 +41,7 @@ function getIPAddress() {
 }
 
 debug(`get ip address: ${getIPAddress()}`);
+*/
 
 module.exports = {
     generateWebpackConfig: function generateWebpackConfig(
