@@ -52,7 +52,7 @@
         "glob": "^7.1.2",
         "jest-each": "^24.8.0",
         "jest-environment-node": "^24.8.0",
-        "jest-environment-puppeteer": "4.1.1",
+        "jest-environment-puppeteer": "^4.1.1",
         "jest-image-snapshot": "git://github.com/americanexpress/jest-image-snapshot.git#8195fc21bf18cc6c416cc6523f3faddd377abe04",
         "jest-puppeteer": "^4.4.0",
         "lodash.merge": "^4.6.1",
@@ -65,7 +65,7 @@
     "peerDependencies": {
         "@babel/polyfill": "^7.0.0",
         "html-webpack-plugin": "^3.2.0",
-        "jest": "^24.5.0",
+        "jest": "^24.5.0 || ^25.0.0",
         "puppeteer": "^2.0.0",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
