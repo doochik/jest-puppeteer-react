@@ -50,11 +50,11 @@ async function checkUrlAvailability(host) {
             {
                 hostname: chunks[0],
                 port: chunks[1],
-                timeout: 100,
+                timeout: 500,
             },
             resolve
         );
-        req.setTimeout(100);
+        req.setTimeout(500);
         req.on('error', reject);
         req.on('timeout', reject);
     });
