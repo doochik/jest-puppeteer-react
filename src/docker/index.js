@@ -22,7 +22,7 @@ async function getAvailableBrowserURL(containerId) {
     const containerIp = inspectResponse.object;
 
     debug(`Found container IP: ${containerIp}`);
-    const urlsToCheck = ['0.0.0.0:9222', `${containerIp}:9222`];
+    const urlsToCheck = ['http://0.0.0.0:9222', `http://${containerIp}:9222`];
 
     let availableUrl;
     for (let i = 0; i < urlsToCheck.length; i++) {
@@ -37,26 +37,28 @@ async function getAvailableBrowserURL(containerId) {
         }
     }
 
-    debug(`Found available browserURL: ${availableUrl}`);
-
-    // fallback to original ws if we can't find any available url
-    return `http://${availableUrl || '0.0.0.0:9222'}`;
+    if (availableUrl) {
+        return availableUrl;
+    } else {
+        throw new Error('could not find available browseURL');
+    }
 }
 
 async function checkUrlAvailability(host) {
-    const chunks = host.split(':');
     return new Promise((resolve, reject) => {
-        const req = http.get(
-            {
-                hostname: chunks[0],
-                port: chunks[1],
-                timeout: 500,
-            },
-            resolve
-        );
+        const req = http.get(host, { timeout: 500 }, () => {
+            req.abort();
+            resolve();
+        });
         req.setTimeout(500);
-        req.on('error', reject);
-        req.on('timeout', reject);
+        req.on('error', e => {
+            req.abort();
+            reject(e);
+        });
+        req.on('timeout', e => {
+            req.abort();
+            reject(e);
+        });
     });
 }
 
@@ -95,6 +97,9 @@ async function start(config) {
         containerId = data2.containerId;
     }
 
+    // wait a second for chrome
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     let retriesLeft = 10;
     let browserURL = null;
     while (!browserURL) {
@@ -103,7 +108,7 @@ async function start(config) {
         } catch (e) {
             if (retriesLeft > 0) {
                 retriesLeft--;
-                debug('waiting 5 seconds for logs');
+                debug('waiting 5 seconds for chrome');
                 await new Promise(resolve => setTimeout(resolve, 5000));
             } else {
                 throw e;
