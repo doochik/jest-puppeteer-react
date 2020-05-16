@@ -53,7 +53,7 @@
         "jest-each": "^24.8.0",
         "jest-environment-node": "^24.8.0",
         "jest-environment-puppeteer": "^4.1.1",
-        "jest-image-snapshot": "git://github.com/americanexpress/jest-image-snapshot.git#8195fc21bf18cc6c416cc6523f3faddd377abe04",
+        "jest-image-snapshot": "^3.1.0",
         "jest-puppeteer": "^4.4.0",
         "lodash.merge": "^4.6.1",
         "node-fetch": "^2.5.0",
